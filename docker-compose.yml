@@ -1,4 +1,4 @@
-version: '3.6'
+#version: '3.6'
 
 networks:
   ollama:
@@ -29,7 +29,7 @@ services:
     ports:
       - 3002:8080
     environment:
-      - 'OLLAMA_API_BASE_URL=http://ollama:11434/api'
+      - 'OLLAMA_API_BASE_URL=http://ollama:11434'
     extra_hosts:
       - host.docker.internal:host-gateway
     networks:
