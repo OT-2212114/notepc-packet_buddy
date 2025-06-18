@@ -8,7 +8,8 @@ from langchain_community.vectorstores import Chroma
 from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationalRetrievalChain
 from langchain_community.document_loaders import JSONLoader
-from langchain_experimental.text_splitter import SemanticChunker
+#from langchain_experimental.text_splitter import SemanticChunker
+from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.embeddings import HuggingFaceInstructEmbeddings 
 
 # Message classes
@@ -81,8 +82,11 @@ class ChatWithPCAP:
         self.pages = self.loader.load_and_split()
 
     def split_into_chunks(self):
+        #with st.spinner("Splitting into chunks..."):         
+        #    self.text_splitter = SemanticChunker(self.embedding_model)
+        #    self.docs = self.text_splitter.split_documents(self.pages)
         with st.spinner("Splitting into chunks..."):         
-            self.text_splitter = SemanticChunker(self.embedding_model)
+            self.text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
             self.docs = self.text_splitter.split_documents(self.pages)
 
     def store_in_chroma(self):
