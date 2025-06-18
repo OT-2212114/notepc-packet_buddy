@@ -7,7 +7,7 @@ RUN echo "==> Upgrading apk and installing system utilities ...." \
  && apt-get install -y wget \
  && apt-get -y install sudo
 
-RUN echo "==> Installing Python3 and pip ...." \  
+RUN echo "==> Installing Python3 and pip ...." \
  && apt-get install python3 -y \
  && apt install python3-pip -y
 
@@ -35,6 +35,7 @@ RUN echo "==> Adding requests ..." \
   && pip install --break-system-packages requests
 
 RUN echo "==> Adding InstructorEmbedding ..." \
+  && pip install --break-system-packages torch \
   && pip install --break-system-packages -U sentence-transformers==2.2.2 \
   && pip install --break-system-packages InstructorEmbedding
 
