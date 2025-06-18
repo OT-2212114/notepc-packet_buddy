@@ -8,8 +8,7 @@ from langchain_community.vectorstores import Chroma
 from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationalRetrievalChain
 from langchain_community.document_loaders import JSONLoader
-#from langchain_experimental.text_splitter import SemanticChunker
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_experimental.text_splitter import SemanticChunker
 from langchain_community.embeddings import HuggingFaceInstructEmbeddings 
 
 # Message classes
@@ -28,7 +27,7 @@ class AIMessage(Message):
 @st.cache_resource
 def load_model():
     with st.spinner("Downloading Instructor XL Embeddings Model locally....please be patient"):
-        embedding_model=HuggingFaceInstructEmbeddings(model_name="hkunlp/instructor-large", model_kwargs={"device": "cpu"})
+        embedding_model=HuggingFaceInstructEmbeddings(model_name="hkunlp/instructor-large", model_kwargs={"device": "cuda"})
     return embedding_model
 
 # Function to generate priming text based on pcap data
@@ -82,11 +81,8 @@ class ChatWithPCAP:
         self.pages = self.loader.load_and_split()
 
     def split_into_chunks(self):
-        #with st.spinner("Splitting into chunks..."):         
-        #    self.text_splitter = SemanticChunker(self.embedding_model)
-        #    self.docs = self.text_splitter.split_documents(self.pages)
         with st.spinner("Splitting into chunks..."):         
-            self.text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
+            self.text_splitter = SemanticChunker(self.embedding_model)
             self.docs = self.text_splitter.split_documents(self.pages)
 
     def store_in_chroma(self):
